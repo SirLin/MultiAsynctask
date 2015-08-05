@@ -49,11 +49,16 @@ public abstract class MultiAsynctask<Param, Update, Result> {
 	/**
 	 * Used to perform asynchronous tasks, if you want to modify the number of concurrent tasks, update the count
 	 */
-	private static final ThreadPoolExecutor MAIN_THREAD_POOL_EXECUTOR = new ThreadPoolExecutor(10, 10, 0L,
-			TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>());
-	/**
-	 * Used to perform the child thread, when asynchronous tasks execution threads
-	 */
+	private static ThreadPoolExecutor MAIN_THREAD_POOL_EXECUTOR;
+
+	public MultiAsynctask() {
+		this(5);
+	}
+
+	public MultiAsynctask(int count) {
+		MAIN_THREAD_POOL_EXECUTOR = new ThreadPoolExecutor(count, count, 0L, TimeUnit.MILLISECONDS,
+				new LinkedBlockingQueue<Runnable>());
+	}
 
 	/**
 	 * Use the single model, produce a handler, to forward the message
@@ -98,7 +103,6 @@ public abstract class MultiAsynctask<Param, Update, Result> {
 	 * Before executing the child thread is called, you can now some <code>Dialog</code>
 	 */
 	public void onPrepare() {
-
 	}
 
 	/**
